@@ -1,0 +1,58 @@
+# =============================================================================
+# AEGIS-AI Git Ignore Configuration
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints & autosaves
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Streamlit runtime & secrets
+.streamlit/secrets.toml
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary video processing and media caches
+*.mp4
+*.avi
+*.mov
+*.mkv
+temp_*.mp4
+
+# Generic YOLO downloads (Keep custom trained models/best.pt)
+/yolov8n.pt
+notebooks/yolov8n.pt
+*.weights
+
+# Runtime session logs (Keep benchmark reference sample_violation_logs.csv and privacy_safe_summary.csv)
+data/logs/violations_*.csv
+data/logs/violation_logs_*.csv
+data/logs/violation_logs_*.json
+
+# Temporary / testing artifacts
+*.tmp
+*.bak
+.pytest_cache/
+.coverage
+htmlcov/

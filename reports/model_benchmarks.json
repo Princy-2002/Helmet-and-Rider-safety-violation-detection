@@ -1,0 +1,50 @@
+{
+  "dataset_summary": {
+    "total_images": 77,
+    "total_instances": 156,
+    "evaluation_split": "Test Split (Ground Truth Evaluated)",
+    "hardware": "NVIDIA T4 Tensor Core GPU (Google Colab)"
+  },
+  "overall_metrics": {
+    "map_50": 87.59,
+    "map_50_95": 52.06,
+    "precision": 84.11,
+    "recall": 79.10
+  },
+  "class_breakdown": {
+    "With Helmet (Compliant)": {
+      "Precision": 0.859,
+      "Recall": 0.888,
+      "mAP@50": 0.916,
+      "mAP@50-95": 0.603
+    },
+    "Without Helmet (Violation)": {
+      "Precision": 0.823,
+      "Recall": 0.694,
+      "mAP@50": 0.836,
+      "mAP@50-95": 0.438
+    }
+  },
+  "experiment_history": [
+    {
+      "Experiment": "1. Baseline YOLOv8n (50 ep)",
+      "Overall mAP@50 (%)": 87.10,
+      "Violation Recall (%)": 77.60
+    },
+    {
+      "Experiment": "2. Strong Aug (40 ep)",
+      "Overall mAP@50 (%)": 83.67,
+      "Violation Recall (%)": 68.60
+    },
+    {
+      "Experiment": "3. Mild Aug (40 ep)",
+      "Overall mAP@50 (%)": 85.90,
+      "Violation Recall (%)": 71.60
+    },
+    {
+      "Experiment": "4. AdamW + 5° Tilt (40 ep)",
+      "Overall mAP@50 (%)": 85.37,
+      "Violation Recall (%)": 73.10
+    }
+  ]
+}
