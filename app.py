@@ -590,7 +590,7 @@ st.markdown(f"""
         <span class="pulse-dot"></span> LIVE SURVEILLANCE & ENFORCEMENT RADAR ONLINE
     </div>
     <div class="hero-title">HELMET & RIDER-SAFETY COMMAND CENTER</div>
-    <div class="hero-subtitle">Automated Real-Time Computer Vision & Temporal Traffic Analytics Platform | Week 3 MVP + Pro Features</div>
+    <div class="hero-subtitle">Automated Real-Time Computer Vision & Temporal Traffic Analytics Platform</div>
     <div class="hero-badges">
         <span class="badge-chip cyan">⚡ YOLOv8n Neural Vision</span>
         <span class="badge-chip green">🎯 ByteTrack MOT Active</span>
