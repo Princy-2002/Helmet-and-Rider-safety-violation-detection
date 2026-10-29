@@ -723,20 +723,10 @@ with tab_live:
 
         # Mode 1: Upload Video
         if input_mode == "Upload Video":
-            sample_vid_path = "data/demo/sample_traffic_video.mp4"
-            has_sample_vid = os.path.exists(sample_vid_path)
-
-            col_up1, col_up2 = st.columns([7, 3])
-            with col_up1:
-                uploaded_video = st.file_uploader(
-                    "Upload Traffic Video Footage (.mp4, .avi, .mov)",
-                    type=["mp4", "avi", "mov"]
-                )
-            with col_up2:
-                st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-                use_sample_vid = False
-                if has_sample_vid:
-                    use_sample_vid = st.checkbox("🎬 Use Sample Traffic Video", value=False, help="Quickly test with pre-loaded 8-second traffic CCTV video")
+            uploaded_video = st.file_uploader(
+                "Upload Traffic Video Footage (.mp4, .avi, .mov)",
+                type=["mp4", "avi", "mov"]
+            )
 
             video_to_process = None
             if uploaded_video is not None:
@@ -744,8 +734,6 @@ with tab_live:
                 tfile.write(uploaded_video.read())
                 tfile.close()
                 video_to_process = tfile.name
-            elif use_sample_vid and has_sample_vid:
-                video_to_process = sample_vid_path
 
             if video_to_process is not None:
                 v_ctrl1, v_ctrl2 = st.columns([1, 1])
