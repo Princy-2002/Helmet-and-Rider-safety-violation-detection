@@ -56,3 +56,4 @@ data/logs/violation_logs_*.json
 .pytest_cache/
 .coverage
 htmlcov/
+data/logs/challan_dispatches.json
