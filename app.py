@@ -723,16 +723,31 @@ with tab_live:
 
         # Mode 1: Upload Video
         if input_mode == "Upload Video":
-            uploaded_video = st.file_uploader(
-                "Upload Traffic Video Footage (.mp4, .avi, .mov)",
-                type=["mp4", "avi", "mov"]
-            )
+            sample_vid_path = "data/demo/sample_traffic_video.mp4"
+            has_sample_vid = os.path.exists(sample_vid_path)
 
+            col_up1, col_up2 = st.columns([7, 3])
+            with col_up1:
+                uploaded_video = st.file_uploader(
+                    "Upload Traffic Video Footage (.mp4, .avi, .mov)",
+                    type=["mp4", "avi", "mov"]
+                )
+            with col_up2:
+                st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+                use_sample_vid = False
+                if has_sample_vid:
+                    use_sample_vid = st.checkbox("🎬 Use Sample Traffic Video", value=False, help="Quickly test with pre-loaded 8-second traffic CCTV video")
+
+            video_to_process = None
             if uploaded_video is not None:
                 tfile = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
                 tfile.write(uploaded_video.read())
                 tfile.close()
+                video_to_process = tfile.name
+            elif use_sample_vid and has_sample_vid:
+                video_to_process = sample_vid_path
 
+            if video_to_process is not None:
                 v_ctrl1, v_ctrl2 = st.columns([1, 1])
                 with v_ctrl1:
                     stream_active = st.toggle("▶️ Stream Playback Active", value=True, help="Toggle OFF to pause or halt video processing")
@@ -744,7 +759,7 @@ with tab_live:
                 if not stream_active:
                     st.info("⏹️ Stream playback halted. Turn on 'Stream Playback Active' to run.")
                 else:
-                    cap = cv2.VideoCapture(tfile.name)
+                    cap = cv2.VideoCapture(video_to_process)
                     frame_count = 0
                     frame_skip = 2
 
