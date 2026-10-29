@@ -579,6 +579,24 @@ detector = get_detector(selected_model)
 detector.update_thresholds(conf=conf_thresh, iou=iou_thresh)
 is_helmet_model = check_is_helmet_model(detector)
 
+def count_helmet_stats(detections, is_helmet_model=True):
+    without_helmet = 0
+    with_helmet = 0
+    for d in detections:
+        c_name = d.get("class_name", "").lower()
+        c_id = d.get("class_id")
+        if is_helmet_model:
+            if c_id == 1 or "without" in c_name or "no helmet" in c_name:
+                without_helmet += 1
+            elif c_id == 0 or "with helmet" in c_name or c_name == "helmet":
+                with_helmet += 1
+        else:
+            if c_name == "person":
+                without_helmet += 1
+            elif c_name in ["motorcycle", "bicycle"]:
+                with_helmet += 1
+    return without_helmet, with_helmet
+
 
 # =============================================================================
 # 5. HERO BRANDING & STATUS OVERLAY
@@ -829,17 +847,11 @@ with tab_live:
 
                 st.image(annotated_rgb, caption="Annotated Traffic Detection", use_container_width=True)
 
-                if is_helmet_model:
-                    without_helmet = sum(1 for d in detections if d.get("class_id") == 1 or "Without" in d.get("class_name", ""))
-                    with_helmet = sum(1 for d in detections if d.get("class_id") == 0 or "With" in d.get("class_name", ""))
-                else:
-                    # Generic COCO fallback model: flag person on road as unverified
-                    without_helmet = sum(1 for d in detections if d.get("class_name", "").lower() == "person")
-                    with_helmet = 0
+                without_helmet, with_helmet = count_helmet_stats(detections, is_helmet_model)
                 total_riders = without_helmet + with_helmet
 
                 live_rider_metric.metric("Active Riders Detected", str(total_riders))
-                live_violation_metric.metric("Violations (Unhelmeted)", str(without_helmet))
+                live_violation_metric.metric("Violations (Unhelmeted)", str(without_helmet), delta="VIOLATION DETECTED" if without_helmet > 0 else None)
                 live_compliant_metric.metric("Compliant Riders", str(with_helmet))
                 live_fps_metric.metric("Inference FPS", f"{fps:.1f}")
 
@@ -884,12 +896,11 @@ with tab_live:
 
                 st.image(annotated_rgb, caption="Webcam Spatial Inference", use_container_width=True)
 
-                without_helmet = sum(1 for d in detections if d.get("class_id") == 1 or "Without" in d.get("class_name", ""))
-                with_helmet = sum(1 for d in detections if d.get("class_id") == 0 or "With" in d.get("class_name", ""))
+                without_helmet, with_helmet = count_helmet_stats(detections, is_helmet_model)
                 total_riders = with_helmet + without_helmet
 
                 live_rider_metric.metric("Active Riders Detected", str(total_riders))
-                live_violation_metric.metric("Violations (Unhelmeted)", str(without_helmet))
+                live_violation_metric.metric("Violations (Unhelmeted)", str(without_helmet), delta="VIOLATION DETECTED" if without_helmet > 0 else None)
                 live_compliant_metric.metric("Compliant Riders", str(with_helmet))
 
                 if total_riders > 0:
@@ -930,12 +941,7 @@ with tab_live:
 
                 st.image(annotated_rgb, caption="CCTV Node: CAM-01 (Highway North Corridor) - Active Real-Time Stream", use_container_width=True)
 
-                if is_helmet_model:
-                    without_helmet = sum(1 for d in detections if d.get("class_id") == 1 or "Without" in d.get("class_name", ""))
-                    with_helmet = sum(1 for d in detections if d.get("class_id") == 0 or "With" in d.get("class_name", ""))
-                else:
-                    without_helmet = sum(1 for d in detections if d.get("class_name", "").lower() == "person")
-                    with_helmet = sum(1 for d in detections if d.get("class_name", "").lower() in ["motorcycle", "bicycle"])
+                without_helmet, with_helmet = count_helmet_stats(detections, is_helmet_model)
                 total_riders = without_helmet + with_helmet
 
                 live_rider_metric.metric("Active Riders Detected", str(max(1, total_riders)))
